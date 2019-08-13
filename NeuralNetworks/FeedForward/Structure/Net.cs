@@ -13,6 +13,11 @@ namespace NeuralNetworks.FeedForward.Structure
 
         public IEnumerable<double> CalculateOutputs()
         {
+            foreach(var cachedNeuron in AllNeurons.OfType<ACachedNeuron>())
+            {
+                cachedNeuron.ResetCache();
+            }
+
             return OutputNeurons.Select(o => o.Value);
         }
 
