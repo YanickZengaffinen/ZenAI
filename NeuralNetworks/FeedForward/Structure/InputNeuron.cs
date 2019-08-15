@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using NeuralNetworks.ActivationFunctions;
 
 namespace NeuralNetworks.FeedForward.Structure
 {
     public class InputNeuron : INeuron
     {
+        public long Id { get; private set; }
+
         /// <summary>
         /// Hint: InConnections are not used by input neurons
         /// </summary>
@@ -19,6 +19,11 @@ namespace NeuralNetworks.FeedForward.Structure
         /// </summary>
         public IActivationFunction ActivationFunction { get; set; }
         public double Value { get; set; }
+
+        public InputNeuron(long id)
+        {
+            this.Id = id;
+        }
 
         /// <summary>
         /// Hint: Will always be 0 for input neurons

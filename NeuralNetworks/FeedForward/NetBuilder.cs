@@ -11,6 +11,8 @@ namespace NeuralNetworks.FeedForward
         private readonly IRandomGenerator weightRandom;
         private readonly IRandomGenerator biasRandom;
 
+        public long CurrentId = long.MinValue;
+
         public NetBuilder(IRandomGenerator weightRandom, IRandomGenerator biasRandom)
         {
             this.weightRandom = weightRandom;
@@ -20,7 +22,7 @@ namespace NeuralNetworks.FeedForward
         #region Single
         public IConnection Connect(INeuron origin, INeuron destination)
         {
-            var connection = new Connection(weightRandom.Generate(), origin, destination);
+            var connection = new Connection(ReserveId(), weightRandom.Generate(), origin, destination);
             origin.OutConnections.Add(connection);
             destination.InConnections.Add(connection);
 
@@ -29,7 +31,7 @@ namespace NeuralNetworks.FeedForward
 
         public INeuron Create(IActivationFunction activationFunction)
         {
-            return new Neuron()
+            return new Neuron(ReserveId())
             {
                 ActivationFunction = activationFunction,
                 Bias = biasRandom.Generate()
@@ -38,7 +40,7 @@ namespace NeuralNetworks.FeedForward
 
         public InputNeuron CreateInput()
         {
-            return new InputNeuron();
+            return new InputNeuron(ReserveId());
         }
         #endregion
 
@@ -71,7 +73,7 @@ namespace NeuralNetworks.FeedForward
         /// </summary>
         public void CreateNet(IActivationFunction activationFunction, int inputSize, IEnumerable<int> hiddenLayerSizes, int outputLayerSize)
         {
-            var net = new Net();
+            var net = new Net(ReserveId());
 
             net.InputNeurons = CreateInputLayer(inputSize).ToList();
             var lastLayer = net.InputNeurons.Cast<INeuron>();
@@ -86,5 +88,10 @@ namespace NeuralNetworks.FeedForward
             ConnectLayer(lastLayer, net.OutputNeurons);
         }
         #endregion
+
+        public long ReserveId()
+        {
+            return CurrentId++;
+        }
     }
 }

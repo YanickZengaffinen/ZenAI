@@ -2,6 +2,8 @@
 {
     public interface IConnection
     {
+        long Id { get; }
+
         double Weight { get; set; }
 
         INeuron Origin { get; set; }

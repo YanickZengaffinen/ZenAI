@@ -4,6 +4,8 @@ namespace NeuralNetworks.FeedForward.Structure
 {
     public interface INet
     {
+        long Id { get; }
+
         ICollection<INeuron> AllNeurons { get; set; }
 
         ICollection<InputNeuron> InputNeurons { get; set; }

@@ -11,6 +11,12 @@ namespace NeuralNetworks.FeedForward.Structure
         public override ICollection<IConnection> OutConnections { get; set; } = new List<IConnection>();
         public override IActivationFunction ActivationFunction { get; set; }
 
+        public Neuron(long id)
+            : base(id)
+        {
+
+        }
+
         public override double CalculateCacheValue()
         {
             return ActivationFunction.Apply(InConnections.Sum(x => x.Origin.Value * x.Weight) + Bias);
