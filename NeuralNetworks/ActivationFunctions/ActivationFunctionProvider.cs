@@ -18,11 +18,14 @@ namespace NeuralNetworks.ActivationFunctions
 
         public T Get<T>()
             where T : IActivationFunction
+                => Get<T>(GetIdentifier(typeof(T)));
+
+        public T Get<T>(string id)
+            where T : IActivationFunction
         {
-            string id = GetIdentifier(typeof(T));
-            lock(activationFunctions)
+            lock (activationFunctions)
             {
-                if(activationFunctions.ContainsKey(id))
+                if (activationFunctions.ContainsKey(id))
                 {
                     return (T)activationFunctions[id];
                 }

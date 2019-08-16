@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace NeuralNetworks.FeedForward.Structure
 {
-    public class Net : INet, ICloneable
+    public class Net : INet
     {
         public long Id { get; private set; }
 
-        public ICollection<InputNeuron> InputNeurons { get; set; }
+        public ICollection<INeuron> InputNeurons { get; set; }
         public ICollection<INeuron> OutputNeurons { get; set; }
 
         public ICollection<INeuron> AllNeurons { get; set; }
@@ -37,9 +36,9 @@ namespace NeuralNetworks.FeedForward.Structure
             }
         }
 
-        public object Clone()
+        public INet Clone()
         {
-            throw new NotImplementedException();
+            return this.Data().Build();
         }
     }
 }

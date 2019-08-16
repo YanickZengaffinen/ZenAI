@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NeuralNetworks.FeedForward.Structure
 {
@@ -8,7 +9,7 @@ namespace NeuralNetworks.FeedForward.Structure
 
         ICollection<INeuron> AllNeurons { get; set; }
 
-        ICollection<InputNeuron> InputNeurons { get; set; }
+        ICollection<INeuron> InputNeurons { get; set; }
 
         ICollection<INeuron> OutputNeurons { get; set; }
 
@@ -17,5 +18,7 @@ namespace NeuralNetworks.FeedForward.Structure
         void SetInputs(IEnumerable<double> values);
 
         IEnumerable<double> CalculateOutputs();
+
+        INet Clone();
     }
 }

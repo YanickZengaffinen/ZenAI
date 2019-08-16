@@ -22,6 +22,9 @@ namespace NeuralNetworks.FeedForward.Structure
         protected ACachedNeuron(long id)
         {
             this.Id = id;
+
+            InConnections = new List<IConnection>();
+            OutConnections = new List<IConnection>();
         }
 
         public double Value

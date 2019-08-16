@@ -1,4 +1,5 @@
 ﻿using NeuralNetworks.ActivationFunctions;
+using System;
 using System.Collections.Generic;
 
 namespace NeuralNetworks.FeedForward.Structure

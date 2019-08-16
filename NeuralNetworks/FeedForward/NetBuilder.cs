@@ -1,97 +1,80 @@
 ﻿using NeuralNetworks.ActivationFunctions;
 using NeuralNetworks.FeedForward.Structure;
-using Random;
+using NeuralNetworks.FeedForward.Structure.Data;
+using NeuralNetworks.Services;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace NeuralNetworks.FeedForward
 {
-    public class NetBuilder
+    public static class NetBuilderExtensions
     {
-        private readonly IRandomGenerator weightRandom;
-        private readonly IRandomGenerator biasRandom;
-
-        public long CurrentId = long.MinValue;
-
-        public NetBuilder(IRandomGenerator weightRandom, IRandomGenerator biasRandom)
+        /// <summary>
+        /// Builds a net from a given structure
+        /// </summary>
+        /// <param name="data">The data defining the nets structure</param>
+        public static INet Build(this INetData data)
         {
-            this.weightRandom = weightRandom;
-            this.biasRandom = biasRandom;
-        }
+            var activationFunctionProvider = ServiceRegistry.Instance.GetService<ActivationFunctionProvider>();
+            var allConnections = new List<IConnection>(data.AllConnections.Count);
+            var neuronsById = new Dictionary<long, INeuron>();
 
-        #region Single
-        public IConnection Connect(INeuron origin, INeuron destination)
-        {
-            var connection = new Connection(ReserveId(), weightRandom.Generate(), origin, destination);
-            origin.OutConnections.Add(connection);
-            destination.InConnections.Add(connection);
-
-            return connection;
-        }
-
-        public INeuron Create(IActivationFunction activationFunction)
-        {
-            return new Neuron(ReserveId())
+            // Initialize all connections and instantiate dummy neurons that will be fully initialized later
+            foreach(var connectionData in data.AllConnections)
             {
-                ActivationFunction = activationFunction,
-                Bias = biasRandom.Generate()
+                // Check if the origin neuron already exists, if not add a new one
+                if (!neuronsById.TryGetValue(connectionData.OriginNeuronId, out INeuron origin))
+                {
+                    origin = new Neuron(connectionData.OriginNeuronId);
+                    neuronsById.Add(connectionData.OriginNeuronId, origin);
+                }
+
+                // Check if the destination neuron already exists, if not add a new one
+                if (!neuronsById.TryGetValue(connectionData.DestinationNeuronId, out INeuron destination))
+                {
+                    destination = new Neuron(connectionData.DestinationNeuronId);
+                    neuronsById.Add(connectionData.DestinationNeuronId, destination);
+                }
+
+                // Initialize the connection and add it to the connected neurons
+                var connection = new Connection(connectionData.Id, connectionData.Weight, origin, destination);
+                allConnections.Add(connection);
+                origin.OutConnections.Add(connection);
+                destination.InConnections.Add(connection);
+            }
+
+            // Fully initialize the dummy neurons
+            foreach(var neuronData in data.AllNeurons)
+            {
+                var neuron = neuronsById[neuronData.Id];
+                neuron.Bias = neuronData.Bias;
+                neuron.ActivationFunction = activationFunctionProvider.Get<IActivationFunction>(neuronData.ActivationFunction);
+            }
+
+            // Get the input & output neurons
+            var inputNeurons = data.InputNeuronIds.Select(id => neuronsById[id]).ToList();
+            var outputNeurons = data.OutputNeuronIds.Select(id => neuronsById[id]).ToList();
+
+            return new Net(data.Id) {
+                AllNeurons = neuronsById.Values,
+                AllConnections = allConnections,
+                InputNeurons = inputNeurons,
+                OutputNeurons = outputNeurons
             };
         }
 
-        public InputNeuron CreateInput()
+        public static INetData Data(this INet net)
         {
-            return new InputNeuron(ReserveId());
-        }
-        #endregion
-
-        #region Layer
-        /// <summary>
-        /// Fully connects two layers of neurons
-        /// </summary>
-        public IEnumerable<IConnection> ConnectLayer(IEnumerable<INeuron> origins, IEnumerable<INeuron> destinations)
-        {
-            return origins.SelectMany(o => destinations.Select(d => Connect(o, d)));
+            return new NetData(
+                net.Id, 
+                net.AllNeurons.Select(n => n.Data()).ToList(), net.AllConnections.Select(c => c.Data()).ToList(), 
+                net.InputNeurons.Select(n => n.Id).ToList(), net.OutputNeurons.Select(n => n.Id).ToList());
         }
 
-        public IEnumerable<INeuron> CreateLayer(IActivationFunction activationFunction, int size)
-        {
-            return Enumerable.Range(0, size)
-                .Select(i => Create(activationFunction));
-        }
+        public static INeuronData Data(this INeuron neuron)
+            => new NeuronData(neuron.Id, neuron.Bias, neuron.ActivationFunction.GetType().FullName, neuron.InConnections.Select(c => c.Id).ToList(), neuron.OutConnections.Select(c => c.Id).ToList());
 
-        public IEnumerable<InputNeuron> CreateInputLayer(int size)
-        {
-            return Enumerable.Range(0, size)
-                .Select(i => CreateInput());
-        }
-
-        #endregion
-
-        #region Net
-        /// <summary>
-        /// Creates a fully connected feed forward neural network
-        /// </summary>
-        public void CreateNet(IActivationFunction activationFunction, int inputSize, IEnumerable<int> hiddenLayerSizes, int outputLayerSize)
-        {
-            var net = new Net(ReserveId());
-
-            net.InputNeurons = CreateInputLayer(inputSize).ToList();
-            var lastLayer = net.InputNeurons.Cast<INeuron>();
-            foreach(var layerSize in hiddenLayerSizes)
-            {
-                var layer = CreateLayer(activationFunction, layerSize);
-                net.AllConnections = net.AllConnections.Concat(ConnectLayer(lastLayer, layer)).ToList();
-                lastLayer = layer;
-            }
-
-            net.OutputNeurons = CreateLayer(activationFunction, outputLayerSize).ToList();
-            ConnectLayer(lastLayer, net.OutputNeurons);
-        }
-        #endregion
-
-        public long ReserveId()
-        {
-            return CurrentId++;
-        }
+        public static IConnectionData Data(this IConnection connection)
+            => new ConnectionData(connection.Id, connection.Weight, connection.Origin.Id, connection.Destination.Id);
     }
 }

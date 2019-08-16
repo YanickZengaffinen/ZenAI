@@ -1,4 +1,6 @@
-﻿namespace NeuralNetworks.FeedForward.Structure
+﻿using System;
+
+namespace NeuralNetworks.FeedForward.Structure
 {
     public interface IConnection
     {
