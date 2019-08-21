@@ -1,0 +1,1 @@
+Call SetupHelper.Setup() once at the beginning of your program whenever you are using the TrainerAPI
