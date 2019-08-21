@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TrainerAPI.Registries
+namespace Common.Registries
 {
     public class Registry<B> : IRegistry<B>
     {

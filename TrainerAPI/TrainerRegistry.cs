@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using TrainerAPI.Registries;
+﻿using Common.Registries;
+using System.Collections.Generic;
 
 namespace TrainerAPI
 {

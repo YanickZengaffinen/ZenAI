@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Random", "Random\Random.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainerAPI", "TrainerAPI\TrainerAPI.csproj", "{93A66C81-8A6F-4252-8908-08FABB57D27F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StorageEngine", "StorageEngine\StorageEngine.csproj", "{A1B2D0AC-FED6-41C2-87EA-AA44B9EB2C32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{9F6A81F1-6E07-48FD-9E05-15116FADF5EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{93A66C81-8A6F-4252-8908-08FABB57D27F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93A66C81-8A6F-4252-8908-08FABB57D27F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93A66C81-8A6F-4252-8908-08FABB57D27F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2D0AC-FED6-41C2-87EA-AA44B9EB2C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2D0AC-FED6-41C2-87EA-AA44B9EB2C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2D0AC-FED6-41C2-87EA-AA44B9EB2C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2D0AC-FED6-41C2-87EA-AA44B9EB2C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F6A81F1-6E07-48FD-9E05-15116FADF5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F6A81F1-6E07-48FD-9E05-15116FADF5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F6A81F1-6E07-48FD-9E05-15116FADF5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F6A81F1-6E07-48FD-9E05-15116FADF5EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

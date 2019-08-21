@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrainerAPI.Registries
+namespace Common.Registries
 {
     /// <summary>
     /// A registry of objects that derive from B

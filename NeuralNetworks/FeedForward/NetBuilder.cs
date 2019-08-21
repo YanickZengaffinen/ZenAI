@@ -1,9 +1,9 @@
 ﻿using NeuralNetworks.ActivationFunctions;
 using NeuralNetworks.FeedForward.Structure;
 using NeuralNetworks.FeedForward.Structure.Data;
-using NeuralNetworks.Services;
 using System.Collections.Generic;
 using System.Linq;
+using TrainerAPI.Services;
 
 namespace NeuralNetworks.FeedForward
 {
@@ -15,7 +15,7 @@ namespace NeuralNetworks.FeedForward
         /// <param name="data">The data defining the nets structure</param>
         public static INet Build(this INetData data)
         {
-            var activationFunctionProvider = ServiceRegistry.Instance.GetService<ActivationFunctionProvider>();
+            var activationFunctionProvider = ServiceRegistry.Instance.Get<ActivationFunctionProvider>();
             var allConnections = new List<IConnection>(data.AllConnections.Count);
             var neuronsById = new Dictionary<long, INeuron>();
 

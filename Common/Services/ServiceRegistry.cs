@@ -1,7 +1,7 @@
 ﻿using Common.Registries;
 using System;
 
-namespace TrainerAPI.Services
+namespace Common.Services
 {
     /// <summary>
     /// Allows for dependency injection and SPI logic
