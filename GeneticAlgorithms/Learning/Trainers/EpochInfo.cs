@@ -1,15 +1,19 @@
 ﻿using GeneticAlgorithm.Mutation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using TrainerAPI;
 
 namespace GeneticAlgorithm.Learning.Trainers
 {
-    public class EpochInfo<T>
+    public class EpochInfo<T> : IEpochInfo
         where T : IMutant
     {
-        public int Epoch { get; private set; }
+        public int Id { get; private set; }
+
+        /// <summary>
+        /// The average loss of the resulting population
+        /// </summary>
+        public double Loss { get; private set; }
 
         public Population<T> StartPopulation { get; private set; }
 
@@ -17,19 +21,17 @@ namespace GeneticAlgorithm.Learning.Trainers
 
         public IEnumerable<PerformanceResult<T>> Ranking { get; private set; }
 
-        public double AverageError { get; private set; }
+        public double MinLoss { get; private set; }
 
-        public double MinError { get; private set; }
-
-        public double MaxError { get; private set; }
+        public double MaxLoss { get; private set; }
 
         public T Best => Ranking.First().Entity;
 
         public T Worst => Ranking.Last().Entity;
 
-        public EpochInfo(int epoch, Population<T> start, Population<T> end, IEnumerable<PerformanceResult<T>> ranking)
+        public EpochInfo(int id, Population<T> start, Population<T> end, IEnumerable<PerformanceResult<T>> ranking)
         {
-            this.Epoch = epoch;
+            this.Id = id;
             this.StartPopulation = start;
             this.EndPopulation = end;
             this.Ranking = ranking;
@@ -40,19 +42,19 @@ namespace GeneticAlgorithm.Learning.Trainers
             double max = double.MinValue;
             foreach(var r in ranking)
             {
-                if (r.Error < min)
-                    min = r.Error;
+                if (r.Loss < min)
+                    min = r.Loss;
 
-                if (r.Error > max)
-                    max = r.Error;
+                if (r.Loss > max)
+                    max = r.Loss;
 
-                total += r.Error;
+                total += r.Loss;
                 cnt++;
             }
 
-            AverageError = total / cnt;
-            MinError = min;
-            MaxError = max;
+            Loss = total / cnt;
+            MinLoss = min;
+            MaxLoss = max;
         }
     }
 }

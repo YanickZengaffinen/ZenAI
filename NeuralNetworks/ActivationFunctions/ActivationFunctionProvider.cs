@@ -7,6 +7,12 @@ namespace NeuralNetworks.ActivationFunctions
     {
         private readonly IDictionary<string, IActivationFunction> activationFunctions = new Dictionary<string, IActivationFunction>();
 
+        public ActivationFunctionProvider()
+        {
+            //register built in activation functions
+            Register(new SigmoidFunction());
+        }
+
         public void Register<T>(T function)
             where T : IActivationFunction
         {
