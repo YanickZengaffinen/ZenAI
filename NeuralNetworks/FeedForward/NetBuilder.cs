@@ -15,7 +15,7 @@ namespace NeuralNetworks.FeedForward
         /// <param name="data">The data defining the nets structure</param>
         public static INet Build(this INetData data)
         {
-            var activationFunctionProvider = ServiceRegistry.Instance.Get<ActivationFunctionProvider>();
+            var activationFunctionProvider = ServiceRegistry.Instance.Get<ActivationFunctionRegistry>();
             var allConnections = new List<IConnection>(data.AllConnections.Count);
             var neuronsById = new Dictionary<long, INeuron>();
 
