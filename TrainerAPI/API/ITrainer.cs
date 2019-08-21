@@ -6,6 +6,6 @@ namespace TrainerAPI
         where T : IEpochInfo
     {
         // TODO: Use async streams once .net std 2.1 is released
-        IEnumerable<T> Train(int epochs);
+        IEnumerable<T> Train(int epochs, IDictionary<string, object> parameters);
     }
 }
