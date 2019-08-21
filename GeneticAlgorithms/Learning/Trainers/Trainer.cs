@@ -24,7 +24,7 @@ namespace GeneticAlgorithm.Learning.Trainers
             CurrentPopulation = new Population<T>(entities, populationSize);
         }
 
-        public IEnumerable<EpochInfo<T>> Train(int epochs)
+        public IEnumerable<EpochInfo<T>> Train(int epochs, IDictionary<string, object> parameters)
         {
             for(int i = 0; i < epochs; i++)
             {
