@@ -1,15 +1,12 @@
 ﻿using GeneticAlgorithm.Mutation;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using TrainerAPI;
 
 namespace GeneticAlgorithm.Learning.Trainers
 {
-    public class Trainer<T>
+    public class Trainer<T> : ITrainer<EpochInfo<T>>
         where T : IMutant
     {
-        public double Epsilon { get; private set; } = 0.01;
-
         public Optimizer<T> Optimizer { get; private set; }
 
         public Population<T> CurrentPopulation { get; private set; }
@@ -27,19 +24,13 @@ namespace GeneticAlgorithm.Learning.Trainers
             CurrentPopulation = new Population<T>(entities, populationSize);
         }
 
-        public void Train(int epochs, Action<EpochInfo<T>> epochTrainedCallback = null, Action<T> successCallback = null)
+        public IEnumerable<EpochInfo<T>> Train(int epochs)
         {
             for(int i = 0; i < epochs; i++)
             {
                 var newPopulation = Optimizer.Optimize(CurrentPopulation, out IEnumerable<PerformanceResult<T>> ranking);
 
-                var epochInfo = new EpochInfo<T>(i, CurrentPopulation, newPopulation, ranking);
-                epochTrainedCallback?.Invoke(epochInfo);
-
-                if(Math.Abs(epochInfo.MinError) <= Epsilon)
-                {
-                    successCallback?.Invoke(epochInfo.Best);
-                }
+                yield return new EpochInfo<T>(i, CurrentPopulation, newPopulation, ranking);
 
                 CurrentPopulation = newPopulation;
             }

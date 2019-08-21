@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace GeneticAlgorithm.Learning
 {
+    /// <summary>
+    /// Simulates an environment for a certain population and records which entities survive
+    /// </summary>
     public class Optimizer<T>
         where T : IMutant
     {
@@ -29,13 +32,13 @@ namespace GeneticAlgorithm.Learning
 
             ranking = population.Entities
                 .Select(x => new PerformanceResult<T>(x, ErrorFunction.CalculateError(x)))
-                .OrderBy(x => x.Error);
+                .OrderBy(x => x.Loss);
 
             var performances = ranking
                 .Take(decimatedPopulationSize)
                 .ToList();
 
-            var totalErrorOfSurvived = performances.Select(x => Math.Abs(x.Error)).Sum();
+            var totalErrorOfSurvived = performances.Select(x => Math.Abs(x.Loss)).Sum();
 
             var newPopulationEntities = new List<T>(population.Size);
 
@@ -44,7 +47,7 @@ namespace GeneticAlgorithm.Learning
             {
                 newPopulationEntities.Add(performance.Entity);
 
-                double offsetPercentage = (1 - Math.Abs(performance.Error) / totalErrorOfSurvived) / (decimatedPopulationSize - 1);
+                double offsetPercentage = (1 - Math.Abs(performance.Loss) / totalErrorOfSurvived) / (decimatedPopulationSize - 1);
                 int offsetAmount = (int)(offsetPercentage * emptyPopulationSpace);
 
                 for(int i = 0; i < offsetAmount; i++)
