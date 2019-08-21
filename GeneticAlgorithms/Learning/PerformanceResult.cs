@@ -9,6 +9,8 @@ namespace GeneticAlgorithm.Learning
 
         /// <summary>
         /// How badly the entity has performed
+        /// 
+        /// Expected to be positive
         /// </summary>
         public double Loss { get; }
 

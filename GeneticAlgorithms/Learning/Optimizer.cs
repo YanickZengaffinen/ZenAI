@@ -1,6 +1,5 @@
 ﻿using GeneticAlgorithm.Learning.ErrorFunctions;
 using GeneticAlgorithm.Mutation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,7 +37,7 @@ namespace GeneticAlgorithm.Learning
                 .Take(decimatedPopulationSize)
                 .ToList();
 
-            var totalErrorOfSurvived = performances.Select(x => Math.Abs(x.Loss)).Sum();
+            var totalErrorOfSurvived = performances.Select(x => x.Loss).Sum();
 
             var newPopulationEntities = new List<T>(population.Size);
 
@@ -47,7 +46,7 @@ namespace GeneticAlgorithm.Learning
             {
                 newPopulationEntities.Add(performance.Entity);
 
-                double offsetPercentage = (1 - Math.Abs(performance.Loss) / totalErrorOfSurvived) / (decimatedPopulationSize - 1);
+                double offsetPercentage = (1 - performance.Loss / totalErrorOfSurvived) / (decimatedPopulationSize - 1);
                 int offsetAmount = (int)(offsetPercentage * emptyPopulationSpace);
 
                 for(int i = 0; i < offsetAmount; i++)
