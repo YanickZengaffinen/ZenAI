@@ -11,16 +11,16 @@ namespace GeneticAlgorithm.Learning
     public class Optimizer<T>
         where T : IMutant
     {
-        public IErrorFunction<T> ErrorFunction { get; private set; }
+        public ILossFunction<T> LossFunction { get; private set; }
 
         /// <summary>
         /// The percentage of entities that will survive each epoch
         /// </summary>
         public double SurvivalPercentage { get; private set; }
 
-        public Optimizer(IErrorFunction<T> errorFunction, double survivalPercentage = 0.1d)
+        public Optimizer(ILossFunction<T> lossFunction, double survivalPercentage = 0.1d)
         {
-            this.ErrorFunction = errorFunction;
+            this.LossFunction = lossFunction;
             this.SurvivalPercentage = survivalPercentage;
         }
 
@@ -30,7 +30,7 @@ namespace GeneticAlgorithm.Learning
             int emptyPopulationSpace = population.Size - decimatedPopulationSize;
 
             ranking = population.Entities
-                .Select(x => new PerformanceResult<T>(x, ErrorFunction.CalculateError(x)))
+                .Select(x => new PerformanceResult<T>(x, LossFunction.CalculateLoss(x)))
                 .OrderBy(x => x.Loss);
 
             var performances = ranking
