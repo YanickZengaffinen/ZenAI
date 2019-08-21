@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Random\Random.csproj" />
+    <ProjectReference Include="..\TrainerAPI\TrainerAPI.csproj" />
   </ItemGroup>
 
 </Project>
