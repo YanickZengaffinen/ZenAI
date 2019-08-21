@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using TrainerAPI.Registries;
 
-namespace NeuralNetworks.Services
+namespace TrainerAPI.Services
 {
     /// <summary>
     /// Allows for dependency injection and SPI logic
