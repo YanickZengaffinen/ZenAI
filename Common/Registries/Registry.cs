@@ -8,7 +8,10 @@ namespace Common.Registries
         protected IDictionary<string, B> registry = new Dictionary<string, B>();
         public void Register<T>(T entity, Type alias = null) where T : B
         {
-            registry.Add(GetIdentifier(alias ?? typeof(T)), entity);
+            lock(registry)
+            {
+                registry.Add(GetIdentifier(alias ?? typeof(T)), entity);
+            }
         }
 
         public T Get<T>()
@@ -17,7 +20,10 @@ namespace Common.Registries
             string alias = GetIdentifier(typeof(T));
             if (registry.ContainsKey(alias))
             {
-                return (T)registry[alias];
+                lock(registry)
+                {
+                    return (T)registry[alias];
+                }
             }
             else
             {
@@ -28,7 +34,10 @@ namespace Common.Registries
 
         public bool Unregister(Type alias)
         {
-            return registry.Remove(GetIdentifier(alias));
+            lock(registry)
+            {
+                return registry.Remove(GetIdentifier(alias));
+            }
         }
 
 
